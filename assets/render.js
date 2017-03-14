@@ -1,4 +1,6 @@
-define(['knockout', 'jquery', 'text!./template-html.txt', 'text!../appinfo.json'], function(ko, $, template, appinfo){
+define (['knockout', 'jquery', 'text!./template.html', 'text!../appinfo.json'], 
+function (ko, $, template, appinfo){
+
 	return {
 		createComponent: function(args, cb) { return cb(new Component(args)); }
 	};
@@ -9,24 +11,20 @@ define(['knockout', 'jquery', 'text!./template-html.txt', 'text!../appinfo.json'
 	}
 
 	function View(args){
-		/* I. data + template example using third party API bridge:
-
-		var host = 'https://phiveleven.com//api.twitter.com/1.1/',
-			api = 'statuses/user_timeline.json?screen_name=',
-			url = host + api + 'redlabelapp';
-		return $.getJSON(url); */
-
-
-		/* II. Minimal setup for event propagation and config:
+		this.screen_name = ko.observable();
 
 		var Sites = args.SitesSDK;
 
-		Sites.subscribe(Sites.MESSAGE_TYPES.SETTINGS_UPDATED, debug);
-		Sites.publish(Sites.MESSAGE_TYPES.SETTINGS_UPDATED, appinfo);
-		
-// 		console.dir(JSON.parse(appinfo));
-		Sites.getProperty('customSettingsData', debug); */
+		Sites.subscribe(Sites.MESSAGE_TYPES.SETTINGS_UPDATED, update.bind(this));
+
+		Sites.getProperty('customSettingsData', function(data){
+			Sites.publish(Sites.MESSAGE_TYPES.SETTINGS_UPDATED, data);
+		});
 	}
 
-	function debug(){ console.debug(arguments) }
+	function update(settings){
+		this.screen_name(settings.value.params.screen_name);
+	}
+
+	function debug(data){ console.warn(data) }
 });

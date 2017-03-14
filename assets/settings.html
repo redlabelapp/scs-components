@@ -1,68 +1,30 @@
 <!DOCTYPE html>
 	<meta content=UTF-8>
-	<meta http-equiv=X-Frame-Options content=sameorigin>
     <link href=/_sitescloud/renderer/app/sdk/css/app-styles.css rel=stylesheet>
     <script src=/_sitescloud/renderer/app/apps/js/knockout.min.js></script>
-    <script src=/_sitescloud/renderer/app/apps/js/jquery.min.js></script>
     <script src=/_sitescloud/renderer/app/sdk/js/sites.min.js></script>
 
 	<div class="scs-component-settings">
-		<label for=handle class=settings-heading>Handle</label>
-		<input class=settings-text-box>
+		<label for=handle class=settings-heading>Screen Name</label>
+		<input class=settings-text-box data-bind=value:screen_name>
 	</div>
 
 	<script>
-		// set the iFrame height when we've fully rendered
-		ko.bindingHandlers.scsCompComponentImpl = {
-			init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-				var body = document.body,
-					html = document.documentElement;
+	ko.applyBindings(function(){
+		this.screen_name = ko.observable();
 
-				SitesSDK.setHeight(Math.max(
-					body.scrollHeight,
-					body.offsetHeight,
-					html.clientHeight,
-					html.scrollHeight,
-					html.offsetHeight));
-			}
-		};
+		SitesSDK.getProperty('customSettingsData', function(data){
+			this.screen_name(data.params.screen_name);
 
-		// define the viewModel object
-		var SettingsViewModel = function () {
-			var self = this;
+			this.save = ko.computed(function(){
+				SitesSDK.setProperty('customSettingsData', {
+					params: {
+						screen_name: this.screen_name()
+					}
+				});
+			}.bind(this));
+		}.bind(this));
 
-			// create the observables for passing data
-			self.width = ko.observable();
-
-			// create rest of viewModel
-			self.initialized = ko.observable(false);
-			self.saveData = false;
-
-			// Get custom settings
-			SitesSDK.getProperty('customSettingsData', function (data) {
-				//update observable
-				self.width(data.width);
-
-				// note that viewModel is initialized and can start saving data
-				self.initialized(true);
-				self.saveData = true;
-			});
-
-
-			// save whenever any updates occur
-			self.save = ko.computed(function () {
-				var saveconfig = {
-					'width': isNaN(self.width()) ? self.width() : self.width() + 'px'
-				};
-
-				// save data in page
-				if (self.saveData) {
-					SitesSDK.setProperty('customSettingsData', saveconfig);
-				}
-			}, self);
-		};
-
-
-		// apply the bindings
-		ko.applyBindings(new SettingsViewModel());
+	});
 	</script>
+	

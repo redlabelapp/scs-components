@@ -1,15 +1,22 @@
 {
-	"id": "twitter-timeline-component",
+	"id": "twitter-w11",
+
 	"settingsData": {
 		"settingsHeight": 90,
 		"settingsWidth": 300,
-		"settingsRenderOption": "dialog"
+		"settingsRenderOption": "inline"
 	},
+
 	"initialData": {
-		"componentId": "twitter-timeline-component",
-		"componentLayout": "default",
+		"componentId": "twitter-w11",
+		"styleClassName": "twitter-w11",
 		"customSettingsData": {
-			"handle": "redlabelapp"
+			"proxyUrl": "https://phiveleven.com/",
+			"basePath": "/api.twitter.com/1.1/",
+			"apiPath": "statuses/user_timeline.json?",
+			"params": {
+				"screen_name": "redlabelapp"
+			}
 		}
 	}
 }
