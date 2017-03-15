@@ -1,25 +1,38 @@
-define (['knockout', 'jquery', 'text!./template.html', 'text!../appinfo.json'], 
-function (ko, $, template, appinfo){
+require.config({
+	paths: {
+		'twitter': 'https://platform.twitter.com/widgets'
+	}
+});
+
+define ([
+	'knockout', 
+	'jquery', 
+	'text!./template.html', 
+	'text!../appinfo.json',
+	'twitter'
+], function (ko, $, template, appinfo, twitter) {
 
 	return {
 		createComponent: function(args, cb) { return cb(new Component(args)); }
 	};
 
 	function Component(args){
-		this.render = function(container){
-			ko.applyBindings(new View(args), $(template).appendTo(container)[0]); }
+		this.render = function(container){ 
+			new View(args, $(template).appendTo(container)[0]); 
+		};
 	}
 
-	function View(args){
+	function View(args, content){
 		this.screen_name = ko.observable();
 
 		var Sites = args.SitesSDK;
+		
+		Sites.getProperty('customSettingsData', function(data){
+			update.call(this, { value:data });
+			ko.applyBindings(this, content);
+		}.bind(this));
 
 		Sites.subscribe(Sites.MESSAGE_TYPES.SETTINGS_UPDATED, update.bind(this));
-
-		Sites.getProperty('customSettingsData', function(data){
-			Sites.publish(Sites.MESSAGE_TYPES.SETTINGS_UPDATED, data);
-		});
 	}
 
 	function update(settings){
