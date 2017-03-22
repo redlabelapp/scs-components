@@ -28,7 +28,7 @@ define ([
 	function update(view){
 		/* callback for getProperty or SETTINGS_UPDATED */
 		return function(settings){
-			view.screen_name((settings.value || settings).params.screen_name);
+			view.screen_name((settings.value || settings).screen_name);
 			load();
 		};
 	}

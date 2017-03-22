@@ -11,12 +11,7 @@
 		"componentId": "twitter-w11",
 		"styleClassName": "twitter-w11",
 		"customSettingsData": {
-			"proxyUrl": "https://phiveleven.com/",
-			"basePath": "/api.twitter.com/1.1/",
-			"apiPath": "statuses/user_timeline.json?",
-			"params": {
-				"screen_name": "redlabelapp"
-			}
+			"screen_name": "redlabelapp"
 		}
 	}
 }

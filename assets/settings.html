@@ -14,13 +14,11 @@
 		this.screen_name = ko.observable();
 
 		SitesSDK.getProperty('customSettingsData', function(data){
-			this.screen_name(data.params.screen_name);
+			this.screen_name(data.screen_name);
 
 			this.save = ko.computed(function(){
 				SitesSDK.setProperty('customSettingsData', {
-					params: {
-						screen_name: this.screen_name()
-					}
+					screen_name: this.screen_name()
 				});
 			}.bind(this));
 		}.bind(this));
